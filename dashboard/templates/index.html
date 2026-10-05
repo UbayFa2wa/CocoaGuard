@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CocoaGuard AI Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div>
+        <p class="eyebrow">SMART AGRICULTURE • IOT + GEMINI AI</p>
+        <h1>CocoaGuard</h1>
+        <p class="sub">Environmental risk monitoring + cocoa visual advisory</p>
+      </div>
+      <div id="connection" class="pill">Wokwi: connecting…</div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <span class="label">CURRENT RISK</span>
+        <div id="status" class="status low">LOW</div>
+      </div>
+      <div class="score">
+        <span id="riskValue">0</span><small>/100</small>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card"><span>Temperature</span><strong id="temperature">--</strong><em>°C</em></article>
+      <article class="card"><span>Humidity</span><strong id="humidity">--</strong><em>%</em></article>
+      <article class="card"><span>Soil moisture</span><strong id="soil">--</strong><em>%</em></article>
+      <article class="card"><span>Leaf wetness</span><strong id="leaf_wetness">--</strong><em>%</em></article>
+      <article class="card"><span>Rain intensity</span><strong id="rain">--</strong><em>%</em></article>
+    </section>
+
+    <section class="ai">
+      <div class="ai-head">
+        <div>
+          <p class="eyebrow">GEMINI MULTIMODAL ADVISORY</p>
+          <h2>Analyze cocoa condition</h2>
+        </div>
+      </div>
+
+      <form id="aiForm">
+        <label class="upload">
+          <span>Optional cocoa pod/leaf photo</span>
+          <input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif">
+        </label>
+        <button type="submit">Run Gemini Analysis</button>
+      </form>
+
+      <div id="loading" class="hidden">Analyzing…</div>
+
+      <div id="report" class="report hidden">
+        <article><span>AI risk</span><p id="aiRisk"></p></article>
+        <article><span>Visual observation</span><p id="visual"></p></article>
+        <article><span>Sensor interpretation</span><p id="sensorText"></p></article>
+        <article><span>Recommended action</span><p id="action"></p></article>
+        <article><span>Confidence</span><p id="confidence"></p></article>
+      </div>
+
+      <div id="error" class="error hidden"></div>
+    </section>
+
+    <footer>
+      Prototype advisory only • CocoaGuard does not replace field/laboratory diagnosis
+    </footer>
+  </main>
+
+<script>
+const $ = id => document.getElementById(id);
+
+async function refreshSensors() {
+  try {
+    const r = await fetch('/api/sensors');
+    const d = await r.json();
+
+    ['temperature','humidity','soil','leaf_wetness','rain'].forEach(k => {
+      $(k).textContent = Number(d[k] ?? 0).toFixed(1);
+    });
+
+    $('riskValue').textContent = Number(d.risk ?? 0).toFixed(0);
+    $('status').textContent = d.status ?? 'UNKNOWN';
+    $('status').className = 'status ' + String(d.status ?? '').toLowerCase();
+
+    $('connection').textContent = d.connected
+      ? `Wokwi: LIVE ${d.updated_at ? '• ' + d.updated_at : ''}`
+      : 'Wokwi: disconnected';
+    $('connection').className = 'pill ' + (d.connected ? 'connected' : '');
+  } catch (e) {
+    $('connection').textContent = 'Dashboard: connection error';
+  }
+}
+
+setInterval(refreshSensors, 1000);
+refreshSensors();
+
+$('aiForm').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  $('loading').classList.remove('hidden');
+  $('report').classList.add('hidden');
+  $('error').classList.add('hidden');
+
+  const fd = new FormData();
+  const file = $('image').files[0];
+  if (file) fd.append('image', file);
+
+  try {
+    const r = await fetch('/api/analyze', { method: 'POST', body: fd });
+    const data = await r.json();
+
+    if (!data.ok) throw new Error(data.error || 'AI analysis failed');
+
+    const x = data.report;
+    $('aiRisk').textContent = x.overall_risk || '-';
+    $('visual').textContent = x.visual_observation || '-';
+    $('sensorText').textContent = x.sensor_interpretation || '-';
+    $('action').textContent = x.recommended_action || '-';
+    $('confidence').textContent = x.confidence_note || '-';
+    $('report').classList.remove('hidden');
+  } catch (e) {
+    $('error').textContent = e.message;
+    $('error').classList.remove('hidden');
+  } finally {
+    $('loading').classList.add('hidden');
+  }
+});
+</script>
+</body>
+</html>

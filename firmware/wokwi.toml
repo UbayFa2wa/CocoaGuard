@@ -1,0 +1,5 @@
+[wokwi]
+version = 1
+firmware = ".pio/build/seeed_xiao_esp32s3/firmware.bin"
+elf = ".pio/build/seeed_xiao_esp32s3/firmware.elf"
+rfc2217ServerPort = 4000

@@ -1,0 +1,304 @@
+{
+  "version": 1,
+  "author": "CocoaGuard Team",
+  "editor": "wokwi",
+
+  "parts": [
+
+    {
+      "type": "wokwi-text",
+      "id": "title",
+      "top": -45,
+      "left": 140,
+      "attrs": {
+        "text": "COCOAGUARD - SMART COCOA MONITORING SYSTEM"
+      }
+    },
+
+    {
+      "type": "board-xiao-esp32-s3",
+      "id": "xiao",
+      "top": 185,
+      "left": 30,
+      "attrs": {}
+    },
+
+    {
+      "type": "wokwi-text",
+      "id": "simulationNote",
+      "top": -15,
+      "left": 175,
+      "attrs": {
+        "text": "FUNCTIONAL VIRTUAL SENSOR PROTOTYPE"
+      }
+    },
+
+
+    {
+      "type": "wokwi-potentiometer",
+      "id": "temperature",
+      "top": 20,
+      "left": 210,
+      "attrs": {
+        "value": "500"
+      }
+    },
+
+    {
+      "type": "wokwi-text",
+      "id": "temperatureLabel",
+      "top": -5,
+      "left": 190,
+      "attrs": {
+        "text": "TEMPERATURE"
+      }
+    },
+
+
+    {
+      "type": "wokwi-potentiometer",
+      "id": "humidity",
+      "top": 20,
+      "left": 370,
+      "attrs": {
+        "value": "500"
+      }
+    },
+
+    {
+      "type": "wokwi-text",
+      "id": "humidityLabel",
+      "top": -5,
+      "left": 365,
+      "attrs": {
+        "text": "HUMIDITY"
+      }
+    },
+
+
+    {
+      "type": "wokwi-potentiometer",
+      "id": "soil",
+      "top": 140,
+      "left": 210,
+      "attrs": {
+        "value": "550"
+      }
+    },
+
+    {
+      "type": "wokwi-text",
+      "id": "soilLabel",
+      "top": 115,
+      "left": 185,
+      "attrs": {
+        "text": "SOIL MOISTURE"
+      }
+    },
+
+
+    {
+      "type": "wokwi-potentiometer",
+      "id": "leaf",
+      "top": 260,
+      "left": 210,
+      "attrs": {
+        "value": "250"
+      }
+    },
+
+    {
+      "type": "wokwi-text",
+      "id": "leafLabel",
+      "top": 235,
+      "left": 190,
+      "attrs": {
+        "text": "LEAF WETNESS"
+      }
+    },
+
+
+    {
+      "type": "wokwi-potentiometer",
+      "id": "rain",
+      "top": 380,
+      "left": 210,
+      "attrs": {
+        "value": "100"
+      }
+    },
+
+    {
+      "type": "wokwi-text",
+      "id": "rainLabel",
+      "top": 355,
+      "left": 190,
+      "attrs": {
+        "text": "RAIN INTENSITY"
+      }
+    },
+
+
+    {
+      "type": "wokwi-led",
+      "id": "green",
+      "top": 100,
+      "left": 540,
+      "attrs": {
+        "color": "green",
+        "label": "LOW"
+      }
+    },
+
+    {
+      "type": "wokwi-resistor",
+      "id": "rg",
+      "top": 112,
+      "left": 450,
+      "attrs": {
+        "value": "220"
+      }
+    },
+
+
+    {
+      "type": "wokwi-led",
+      "id": "yellow",
+      "top": 200,
+      "left": 540,
+      "attrs": {
+        "color": "yellow",
+        "label": "MODERATE"
+      }
+    },
+
+    {
+      "type": "wokwi-resistor",
+      "id": "ry",
+      "top": 212,
+      "left": 450,
+      "attrs": {
+        "value": "220"
+      }
+    },
+
+
+    {
+      "type": "wokwi-led",
+      "id": "red",
+      "top": 300,
+      "left": 540,
+      "attrs": {
+        "color": "red",
+        "label": "HIGH"
+      }
+    },
+
+    {
+      "type": "wokwi-resistor",
+      "id": "rr",
+      "top": 312,
+      "left": 450,
+      "attrs": {
+        "value": "220"
+      }
+    },
+
+
+    {
+      "type": "wokwi-buzzer",
+      "id": "buzzer",
+      "top": 405,
+      "left": 510,
+      "attrs": {
+        "volume": "0.25",
+        "mode": "smooth"
+      }
+    },
+
+    {
+      "type": "wokwi-text",
+      "id": "buzzerLabel",
+      "top": 380,
+      "left": 495,
+      "attrs": {
+        "text": "CRITICAL ALERT"
+      }
+    },
+
+
+    {
+      "type": "board-ssd1306",
+      "id": "oled",
+      "top": 470,
+      "left": 20,
+      "attrs": {
+        "i2cAddress": "0x3c"
+      }
+    },
+
+    {
+      "type": "wokwi-text",
+      "id": "oledLabel",
+      "top": 445,
+      "left": 35,
+      "attrs": {
+        "text": "LIVE STATUS DISPLAY"
+      }
+    }
+
+  ],
+
+  "connections": [
+
+    [ "temperature:VCC", "xiao:3V3", "red", [] ],
+    [ "temperature:GND", "xiao:GND", "black", [] ],
+    [ "temperature:SIG", "xiao:D0", "green", [] ],
+
+
+    [ "humidity:VCC", "xiao:3V3", "red", [] ],
+    [ "humidity:GND", "xiao:GND", "black", [] ],
+    [ "humidity:SIG", "xiao:D10", "green", [] ],
+
+
+    [ "soil:VCC", "xiao:3V3", "red", [] ],
+    [ "soil:GND", "xiao:GND", "black", [] ],
+    [ "soil:SIG", "xiao:D1", "green", [] ],
+
+
+    [ "leaf:VCC", "xiao:3V3", "red", [] ],
+    [ "leaf:GND", "xiao:GND", "black", [] ],
+    [ "leaf:SIG", "xiao:D2", "green", [] ],
+
+
+    [ "rain:VCC", "xiao:3V3", "red", [] ],
+    [ "rain:GND", "xiao:GND", "black", [] ],
+    [ "rain:SIG", "xiao:D3", "green", [] ],
+
+
+    [ "oled:VCC", "xiao:3V3", "red", [] ],
+    [ "oled:GND", "xiao:GND", "black", [] ],
+    [ "oled:SDA", "xiao:D4", "green", [] ],
+    [ "oled:SCL", "xiao:D5", "blue", [] ],
+
+
+    [ "xiao:D6", "rg:1", "green", [] ],
+    [ "rg:2", "green:A", "green", [] ],
+    [ "green:C", "xiao:GND", "black", [] ],
+
+
+    [ "xiao:D7", "ry:1", "yellow", [] ],
+    [ "ry:2", "yellow:A", "yellow", [] ],
+    [ "yellow:C", "xiao:GND", "black", [] ],
+
+
+    [ "xiao:D8", "rr:1", "red", [] ],
+    [ "rr:2", "red:A", "red", [] ],
+    [ "red:C", "xiao:GND", "black", [] ],
+
+
+    [ "xiao:D9", "buzzer:2", "purple", [] ],
+    [ "buzzer:1", "xiao:GND", "black", [] ]
+
+  ]
+}

@@ -1,0 +1,28 @@
+# Secrets / local environment
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# PlatformIO generated files
+.pio/
+
+# VS Code generated/local files
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/ipch/
+.vscode/.browse.c_cpp.db*
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
